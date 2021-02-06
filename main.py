@@ -1,8 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 JOB = "python"
 WWR_URL = f"https://weworkremotely.com/remote-jobs/search?term={JOB}&button="
+SO_URL = f"https://stackoverflow.com/jobs?q={JOB}&sort=i"
 
 fake_db = []
 
@@ -38,5 +40,23 @@ def get_wwr_info(soup):
         fake_db.append({'company': company, 'title': title, 'url': url})
 
 
-soup = get_soup(WWR_URL)
-get_wwr_info(soup)
+# stackoverflow에서 구인 정보 가져와서 fake_db 배열에 담기
+
+def get_so_info(soup):
+    global fake_db
+    jobs = soup.find('div', {'class': 'listResults'}).find_all(
+        "div", {"class": "grid--cell fl1"})
+    for job in jobs:
+        title = job.find("a")["title"]
+        company = job.find('h3').find('span').string.strip()
+        url = job.find('h2').find('a')['href']
+        fake_db.append({'company': company, 'title': title, 'url': url})
+
+
+# weworkremotely
+wwr_soup = get_soup(WWR_URL)
+get_wwr_info(wwr_soup)
+
+# stackoverflow
+so_soup = get_soup(SO_URL)
+get_so_info(so_soup)
