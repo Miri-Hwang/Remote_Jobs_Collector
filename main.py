@@ -11,4 +11,9 @@ def home():
     return render_template("home.html")
 
 
+@app.route("/search")
+def search():
+    return render_template("jobs.html", num_jobs=len(db))
+
+
 app.run(host="127.0.0.1")
