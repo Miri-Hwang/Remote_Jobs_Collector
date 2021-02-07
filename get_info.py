@@ -32,20 +32,20 @@ def get_wwr_info(soup):
     jobs = soup.find('div', {'class': 'jobs-container'}
                      ).find_all('li', limit=limit-1)
     for job in jobs:
-        company = job.find('span', {'class': 'company'})
-        if company != None:
-            company.string
-        title = job.find('span', {'class': 'title'})
-        if title != None:
-            title.string
-        url = job.find_all('a')
-        if len(url) > 1:
-            url = url[1]
-        else:
-            url = url[0]
 
-        url = 'https://weworkremotely.com'+url['href']
-        db.append({'company': company, 'title': title, 'url': url})
+        if job.find('span', {'class': 'company'}) == None:
+            continue
+        else:
+            company = job.find('span', {'class': 'company'}).string
+            title = job.find('span', {'class': 'title'}).string
+            url = job.find_all('a')
+            if len(url) > 1:
+                url = url[1]
+            else:
+                url = url[0]
+
+            url = 'https://weworkremotely.com'+url['href']
+            db.append({'company': company, 'title': title, 'url': url})
     return db
 
 

@@ -21,7 +21,7 @@ def search():
     else:
         db[job] = collect_info(job)
     print(db)
-    return render_template("jobs.html", num_jobs=len(db[job]), subject=job)
+    return render_template("jobs.html", num_jobs=len(db[job]), subject=job, jobs=db[job])
 
 
 app.run(host="127.0.0.1")
