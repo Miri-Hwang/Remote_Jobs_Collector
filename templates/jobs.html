@@ -3,13 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <title>Remote Jobs</title>
+    <style>
+        .head{
+          text-align: center;
+        }
+        .head h1{
+          color:blueviolet;
+        }
+        body{
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center
+          }
+      </style>
   </head>
   <body>
+    <div class='head'>
     <h1>Remote Jobs</h1>
     <h3>{{num_jobs}} {{subject}} jobs found.</h3>
+    <p>
     <a href="/export?search={{subject}}">Export to CSV</a>
+    </br>
     <a href="http://127.0.0.1:5000/">Go back</a>
-
+    </br></br></br></br>
+    </p>
+    </div>
     <div class = "jobs">
         <p>
         {% for job in jobs %}
