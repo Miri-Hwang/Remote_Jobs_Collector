@@ -5,6 +5,11 @@ from bs4 import BeautifulSoup
 JOB = "python"
 WWR_URL = f"https://weworkremotely.com/remote-jobs/search?term={JOB}&button="
 SO_URL = f"https://stackoverflow.com/jobs?q={JOB}&sort=i"
+RM_URL = f"https://remoteok.io/remote-{JOB}-jobs"
+
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'}
+
 
 fake_db = []
 
@@ -13,6 +18,12 @@ fake_db = []
 
 def get_soup(URL):
     r = requests.get(URL)
+    soup = BeautifulSoup(r.text, "html.parser")
+    return soup
+
+
+def get_soup_head(URL):
+    r = requests.get(URL, headers=headers)
     soup = BeautifulSoup(r.text, "html.parser")
     return soup
 
@@ -52,11 +63,33 @@ def get_so_info(soup):
         url = job.find('h2').find('a')['href']
         fake_db.append({'company': company, 'title': title, 'url': url})
 
+# remoteok에서 구인 정보 가져와서 fake_db 배열에 담기
+
+
+def get_rm_info(soup):
+    global fake_db
+    jobs = soup.find('table', {'id': 'jobsboard'}).find_all('tr')
+    for job in jobs:
+        try:
+            title = job.find('td', {'class': 'company'}).find('h2').string
+            company = job.find('td', {'class': 'company'}).find('h3').string
+            url = job.find('td', {'class': 'company'}).find(
+                'a', {'class': 'preventLink'})['href']
+            url = 'https://remoteok.io'+url
+            fake_db.append({'company': company, 'title': title, 'url': url})
+        except:
+            pass
 
 # weworkremotely
-wwr_soup = get_soup(WWR_URL)
-get_wwr_info(wwr_soup)
+#wwr_soup = get_soup(WWR_URL)
+# get_wwr_info(wwr_soup)
 
 # stackoverflow
-so_soup = get_soup(SO_URL)
-get_so_info(so_soup)
+#so_soup = get_soup(SO_URL)
+# get_so_info(so_soup)
+
+
+# remoteok
+rm_soup = get_soup_head(RM_URL)
+get_rm_info(rm_soup)
+print(fake_db)
