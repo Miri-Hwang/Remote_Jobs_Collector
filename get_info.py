@@ -3,9 +3,6 @@ from bs4 import BeautifulSoup
 
 
 JOB = "python"
-WWR_URL = f"https://weworkremotely.com/remote-jobs/search?term={JOB}&button="
-SO_URL = f"https://stackoverflow.com/jobs?q={JOB}&sort=i"
-RM_URL = f"https://remoteok.io/remote-{JOB}-jobs"
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'}
@@ -83,7 +80,10 @@ def get_rm_info(soup):
     return db
 
 
-def collect_info():
+def collect_info(JOB):
+    WWR_URL = f"https://weworkremotely.com/remote-jobs/search?term={JOB}&button="
+    SO_URL = f"https://stackoverflow.com/jobs?q={JOB}&sort=i"
+    RM_URL = f"https://remoteok.io/remote-{JOB}-jobs"
     wwr_soup = get_soup(WWR_URL)
     so_soup = get_soup(SO_URL)
     rm_soup = get_soup_head(RM_URL)
