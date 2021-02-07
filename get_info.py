@@ -2,8 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 
 
-JOB = "python"
-
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'}
 
@@ -55,7 +53,9 @@ def get_so_info(soup):
         "div", {"class": "grid--cell fl1"})
     for job in jobs:
         title = job.find("a")["title"]
-        company = job.find('h3').find('span').string.strip()
+        company = job.find('h3').find('span').string
+        if company != None:
+            company.strip()
         url = 'https://stackoverflow.com'+job.find('h2').find('a')['href']
         db.append({'company': company, 'title': title, 'url': url})
     return db
